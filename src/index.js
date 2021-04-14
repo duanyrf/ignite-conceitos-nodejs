@@ -26,6 +26,12 @@ function checksExistsUserAccount(request, response, next) {
 app.post('/users', (request, response) => {
   const {name, username} = request.body;
 
+  const userExists = users.some(user => user.name === name);
+
+  if (userExists) {
+    return response.status(400).json({error: 'User already exists'});
+  }
+
   const user = {
     id: uuidv4(),
     name,
@@ -35,7 +41,7 @@ app.post('/users', (request, response) => {
 
   users.push(user);
 
-  return response.status(201).json({message: 'User created successfuly'});
+  return response.status(201).json(user);
 });
 
 app.get('/todos', checksExistsUserAccount, (request, response) => {
@@ -105,7 +111,7 @@ app.delete('/todos/:id', checksExistsUserAccount, (request, response) => {
 
   user.todos.splice(todo, 1);
 
-  return response.json({message: 'Todo deleted successfuly'});
+  return response.status(204).send();
 });
 
 module.exports = app;
