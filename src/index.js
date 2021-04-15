@@ -74,7 +74,7 @@ app.post('/todos', checksExistsUserAccount, (request, response) => {
     title,
     done: false,
     deadline: new Date(deadline),
-    created_at: new Date(),
+    created_at: new Date()
   };
 
   user.todos.push(todo);
@@ -104,8 +104,7 @@ app.delete('/todos/:id', checksExistsUserAccount, checksExistsTodo, (request, re
   const {todo} = request;
   const {user} = request;
 
-  const todoIndex = user.todos.findIndex(td => td.id === todo.id);
-  user.todos.splice(todoIndex, 1);
+  user.todos.splice(user.todos.indexOf(todo), 1);
 
   return response.status(204).send();
 });
